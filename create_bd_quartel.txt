@@ -1,0 +1,178 @@
+-- Criar a base de dados
+CREATE DATABASE gestao_quartel;
+GO
+
+-- Usar a base de dados
+USE gestao_quartel;
+GO
+
+
+create table Pessoa (
+  ID_Pessoa                    int identity not null, 
+  Nome                         varchar(255) null, 
+  DataNascimento               date null, 
+  Morada                       varchar(255) null, 
+  EstadoID_estado              int not null, 
+  QualificçõesID_Qualificações int not null, 
+  MoradaID_Morada              int not null, 
+  TipoID_Tipo                  int not null, 
+  primary key (ID_Pessoa));
+create table EstadoPessoa (
+  ID_estado int identity not null, 
+  Descrição varchar(255) null, 
+  primary key (ID_estado));
+create table Qualificações (
+  ID_Qualificações int identity not null, 
+  Descrição        varchar(255) null, 
+  primary key (ID_Qualificações));
+create table Funções (
+  ID_Funções int identity not null, 
+  descrição  int null, 
+  primary key (ID_Funções));
+create table Equipas (
+  ID_equipa int identity not null, 
+  Nome      varchar(255) null, 
+  primary key (ID_equipa));
+create table Veiculos (
+  ID_Veiculos                           int identity not null, 
+  Matricula                             varchar(255) null, 
+  Capacidade                            int null, 
+  ModeloID_Modelo                       int not null, 
+  EstadoConservaçãoID_EstadoConservação int not null, 
+  TipoVeiculoID_TipoVeiculo             int not null, 
+  primary key (ID_Veiculos));
+create table Marca (
+  ID_marca int identity not null, 
+  Nome     varchar(255) null, 
+  primary key (ID_marca));
+create table Modelo (
+  ID_Modelo     int identity not null, 
+  Nome          varchar(255) null, 
+  MarcaID_marca int not null, 
+  primary key (ID_Modelo));
+create table EstadoConservação (
+  ID_EstadoConservação int identity not null, 
+  Descrição            varchar(255) null, 
+  primary key (ID_EstadoConservação));
+create table Tipo (
+  ID_Tipo             int identity not null, 
+  Descrição           varchar(255) null, 
+  EstatutoID_Estatuto int not null, 
+  primary key (ID_Tipo));
+create table Manutenção (
+  ID_Manutenção                   int identity not null, 
+  TipoManutençãoID_TipoManutenção int not null, 
+  primary key (ID_Manutenção));
+create table TipoManutenção (
+  ID_TipoManutenção int identity not null, 
+  Descrição         varchar(255) null, 
+  primary key (ID_TipoManutenção));
+create table Manutenção_Veiculos (
+  ManutençãoID_Manutenção int not null, 
+  VeiculosID_Veiculos     int not null, 
+  Data                    date null, 
+  Descrição               varchar(255) null, 
+  primary key (ManutençãoID_Manutenção, 
+  VeiculosID_Veiculos));
+create table Incidente (
+  ID_Incidente                      int identity not null, 
+  TipoIncidenteID_TipoIncidente     int not null, 
+  GravidadeID_Gravidade             int not null, 
+  EstadoIncidenteID_EstadoIncidente int not null, 
+  MoradaID_Morada                   int not null, 
+  LocalID_Local                     int not null, 
+  primary key (ID_Incidente));
+create table TipoIncidente (
+  ID_TipoIncidente int identity not null, 
+  Descrição        varchar(255) null, 
+  primary key (ID_TipoIncidente));
+create table Gravidade (
+  ID_Gravidade int identity not null, 
+  Descrição    varchar(255) null, 
+  primary key (ID_Gravidade));
+create table EstadoIncidente (
+  ID_EstadoIncidente int identity not null, 
+  Descrição          varchar(255) null, 
+  primary key (ID_EstadoIncidente));
+create table Pessoa_Equipas (
+  EquipasID_equipa int not null, 
+  PessoaID_Pessoa  int not null, 
+  DataHoraInicio   datetime null, 
+  DataHoraFim      datetime null, 
+  primary key (EquipasID_equipa, 
+  PessoaID_Pessoa));
+create table Incidente_Pessoa_Equipas (
+  IncidenteID_Incidente          int not null, 
+  Pessoa_EquipasEquipasID_equipa int not null, 
+  Pessoa_EquipasPessoaID_Pessoa  int not null, 
+  primary key (IncidenteID_Incidente, 
+  Pessoa_EquipasEquipasID_equipa, 
+  Pessoa_EquipasPessoaID_Pessoa));
+create table Pessoa_Manutenção (
+  PessoaID_Pessoa         int not null, 
+  ManutençãoID_Manutenção int not null, 
+  primary key (PessoaID_Pessoa, 
+  ManutençãoID_Manutenção));
+create table Veiculos_Incidente_Bombeiro_Equipas (
+  VeiculosID_Veiculos                                    int not null, 
+  Incidente_Pessoa_EquipasIncidenteID_Incidente          int not null, 
+  Incidente_Pessoa_EquipasPessoa_EquipasEquipasID_equipa int not null, 
+  Incidente_Pessoa_EquipasPessoa_EquipasPessoaID_Pessoa  int not null, 
+  TempoTotal                                             time(7) null, 
+  DataHoraInicio                                         datetime null, 
+  DataHorafim                                            datetime null, 
+  Danos                                                  varchar(255) null, 
+  primary key (VeiculosID_Veiculos, 
+  Incidente_Pessoa_EquipasIncidenteID_Incidente, 
+  Incidente_Pessoa_EquipasPessoa_EquipasEquipasID_equipa, 
+  Incidente_Pessoa_EquipasPessoa_EquipasPessoaID_Pessoa));
+create table Morada (
+  ID_Morada    int identity not null, 
+  CodigoPostal varchar(255) null, 
+  Localidade   varchar(255) null, 
+  Distrito     varchar(255) null, 
+  Rua          varchar(255) null, 
+  NumeroPorta  varchar(255) null, 
+  primary key (ID_Morada));
+create table Local (
+  ID_Local    int identity not null, 
+  Coordenadas varchar(255) null, 
+  Localidade  varchar(255) null, 
+  Distrito    varchar(255) null, 
+  Estrada     varchar(255) null, 
+  Sentido     varchar(255) null, 
+  Quilometro  varchar(255) null, 
+  primary key (ID_Local));
+create table Estatuto (
+  ID_Estatuto int identity not null, 
+  Descrição   varchar(255) null, 
+  primary key (ID_Estatuto));
+create table TipoVeiculo (
+  ID_TipoVeiculo int identity not null, 
+  Descrição      varchar(255) null, 
+  primary key (ID_TipoVeiculo));
+alter table Pessoa add constraint FKPessoa95240 foreign key (EstadoID_estado) references EstadoPessoa (ID_estado);
+alter table Pessoa add constraint FKPessoa384780 foreign key (QualificçõesID_Qualificações) references Qualificações (ID_Qualificações);
+alter table Pessoa add constraint FKPessoa573996 foreign key (TipoID_Tipo) references Tipo (ID_Tipo);
+alter table Modelo add constraint FKModelo750271 foreign key (MarcaID_marca) references Marca (ID_marca);
+alter table Veiculos add constraint FKVeiculos759460 foreign key (ModeloID_Modelo) references Modelo (ID_Modelo);
+alter table Veiculos add constraint FKVeiculos375990 foreign key (EstadoConservaçãoID_EstadoConservação) references EstadoConservação (ID_EstadoConservação);
+alter table Manutenção_Veiculos add constraint FKManutenção75495 foreign key (ManutençãoID_Manutenção) references Manutenção (ID_Manutenção);
+alter table Manutenção_Veiculos add constraint FKManutenção223107 foreign key (VeiculosID_Veiculos) references Veiculos (ID_Veiculos);
+alter table Manutenção add constraint FKManutenção604707 foreign key (TipoManutençãoID_TipoManutenção) references TipoManutenção (ID_TipoManutenção);
+alter table Incidente add constraint FKIncidente910999 foreign key (TipoIncidenteID_TipoIncidente) references TipoIncidente (ID_TipoIncidente);
+alter table Incidente add constraint FKIncidente172288 foreign key (GravidadeID_Gravidade) references Gravidade (ID_Gravidade);
+alter table Incidente add constraint FKIncidente388353 foreign key (EstadoIncidenteID_EstadoIncidente) references EstadoIncidente (ID_EstadoIncidente);
+alter table Pessoa_Equipas add constraint FKPessoa_Equ2276 foreign key (EquipasID_equipa) references Equipas (ID_equipa);
+alter table Incidente_Pessoa_Equipas add constraint FKIncidente_955429 foreign key (IncidenteID_Incidente) references Incidente (ID_Incidente);
+alter table Incidente_Pessoa_Equipas add constraint FKIncidente_507352 foreign key (Pessoa_EquipasEquipasID_equipa, Pessoa_EquipasPessoaID_Pessoa) references Pessoa_Equipas (EquipasID_equipa, PessoaID_Pessoa);
+alter table Pessoa_Manutenção add constraint FKPessoa_Man160342 foreign key (PessoaID_Pessoa) references Pessoa (ID_Pessoa);
+alter table Pessoa_Manutenção add constraint FKPessoa_Man183124 foreign key (ManutençãoID_Manutenção) references Manutenção (ID_Manutenção);
+alter table Veiculos_Incidente_Bombeiro_Equipas add constraint FKVeiculos_I312385 foreign key (VeiculosID_Veiculos) references Veiculos (ID_Veiculos);
+alter table Veiculos_Incidente_Bombeiro_Equipas add constraint FKVeiculos_I853966 foreign key (Incidente_Pessoa_EquipasIncidenteID_Incidente, Incidente_Pessoa_EquipasPessoa_EquipasEquipasID_equipa, Incidente_Pessoa_EquipasPessoa_EquipasPessoaID_Pessoa) references Incidente_Pessoa_Equipas (IncidenteID_Incidente, Pessoa_EquipasEquipasID_equipa, Pessoa_EquipasPessoaID_Pessoa);
+alter table Pessoa add constraint FKPessoa403272 foreign key (MoradaID_Morada) references Morada (ID_Morada);
+alter table Pessoa_Equipas add constraint FKPessoa_Equ331971 foreign key (PessoaID_Pessoa) references Pessoa (ID_Pessoa);
+alter table Tipo add constraint FKTipo661667 foreign key (EstatutoID_Estatuto) references Estatuto (ID_Estatuto);
+alter table Incidente add constraint FKIncidente51610 foreign key (MoradaID_Morada) references Morada (ID_Morada);
+alter table Incidente add constraint FKIncidente28276 foreign key (LocalID_Local) references Local (ID_Local);
+alter table Veiculos add constraint FKVeiculos296050 foreign key (TipoVeiculoID_TipoVeiculo) references TipoVeiculo (ID_TipoVeiculo);
